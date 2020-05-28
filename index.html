@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Titre de la page</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div>
+            <h4>Champagne</h4>
+        </div>
+        <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Articles</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <div id="banner">
+		<div id="textBanner">1: Bienvenue sur le site de réservation de vélos VeloLibre</div>
+		<button id="stop"><i class="far fa-pause-circle"></i></button>
+		<button id="start"><i class="far fa-play-circle"></i></button>
+		<button id="left"><i class="fas fa-caret-left"></i></button>
+		<button id="right"><i class="fas fa-caret-right"></i></button>
+    </div>
+    <div class="main">
+        <div class="article"></div>
+        <div class="meteo">
+            <div id="location">
+                <span id="city_name"></span>
+            </div>
+            <div id="main_meteo">
+                <div id="meteo_left">
+                    <div>
+                        <img id="weather_picture" src="" alt="">
+                        <p id="weather_desc"></p>
+                    </div>
+                    <div id="temperature"></div>
+                </div>
+                <div id="meteo_rigth">
+                    <span id="wind"></span><br>
+                    <span id="humidity"></span><br>
+                    <span id="pressure"></span><br>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/900200da29.js" crossorigin="anonymous"></script>
+    <script src="js/ajax_get.js"></script>
+    <script src="js/Banner.js"></script>
+    <script src="js/Weather.js"></script>
+</body>
+</html>
