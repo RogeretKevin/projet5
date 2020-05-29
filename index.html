@@ -5,6 +5,8 @@
     <title>Titre de la page</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 </head>
 <body>
     <nav>
@@ -47,7 +49,10 @@
         </div>
     </div>
       
-
+    <div class="main">
+        <div id="map"></div>
+        <div id="contact"></div>
+    </div>
 
 
 
@@ -57,5 +62,6 @@
     <script src="js/ajax_get.js"></script>
     <script src="js/Banner.js"></script>
     <script src="js/Weather.js"></script>
+    <script src="js/Map.js"></script>
 </body>
 </html>
