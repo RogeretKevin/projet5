@@ -8,7 +8,9 @@
 		<button id="right"><i class="fas fa-caret-right"></i></button>
     </div>
     <div class="main">
-        <div class="article"></div>
+        <div class="article">
+            <h2><?= $lastPost['title']; ?></h2>
+        </div>
         <div class="meteo">
             <div id="location">
                 <span id="city_name"></span>
