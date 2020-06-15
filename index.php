@@ -1,7 +1,7 @@
 <?php
 require('controller/controllerFrontend.php');
 
-if (!isset($_GET['p'])) {
+if (!isset($_GET['p']) || $_GET['p'] == "home") {
     home();
 }
 
@@ -13,4 +13,9 @@ else if ($_GET['p'] == 'post') {
     else {
         header('location:index.php?p=post&id=1');
     }
+}
+
+// SAUVEGARDE LES MESSAGE DU FORMULAIRE //
+else if ($_GET['p'] == 'form') {
+    form();
 }
