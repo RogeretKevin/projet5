@@ -1,71 +1,94 @@
-<?php include('includes/header.php') ?>
+<?php include('includes/header.php'); ?>
 
-    <div id="banner">
-		<div id="textBanner">1: Bienvenue sur le site de réservation de vélos VeloLibre</div>
-		<button id="stop"><i class="far fa-pause-circle"></i></button>
-		<button id="start"><i class="far fa-play-circle"></i></button>
-		<button id="left"><i class="fas fa-caret-left"></i></button>
-		<button id="right"><i class="fas fa-caret-right"></i></button>
-    </div>
-    <div class="main">
-        <div class="article">
-            <p>Dernière actualité</p>
-            <div>
-                <h2><?= $lastPost['title']; ?></h2>
-                <p><?= $lastPost['preview']; ?></p>
-                <p><a href="">Lire la suite =></a></p>
-            </div>
-            
-        </div>
-        <div class="meteo">
-            <div id="location">
-                <span id="city_name"></span>
-            </div>
-            <div id="main_meteo">
-                <div id="meteo_left">
-                    <div>
-                        <p><img id="weather_picture" src="" alt=""></p>
-                        <p id="temperature"></p>
-                        <p id="weather_desc"></p>
-                    </div>
-                </div>
-                <div id="meteo_rigth">
-                    <span id="wind"></span><br>
-                    <span id="humidity"></span><br>
-                    <span id="pressure"></span><br>
-                </div>
-            </div>
-        </div>
-    </div>
-      
-    <div class="main">
-        <div id="map"></div>
-        <div id="contact">
-            <div id="contact_left">
-                <form action="index.php?p=form" method="post">
-                    <label for="name">Enter your name: </label>
-                    <input type="text" name="name" id="name" required></br>
-                    <label for="firtName">Enter your firtName: </label>
-                    <input type="text" name="firtName" id="firtName" required></br>
-                    <label for="email">Enter your email: </label>
-                    <input type="email" name="email" id="email" required></br>
-                    
-                    <p>Resident de la ville:</p>
-                    <div>
-                    <input type="radio" id="oui" name="valid" value="oui">
-                    <label for="oui">oui</label>
-                    </div>
+		<!-- banniere -->
+		<div class="hero" data-bg-image="asset/images/banniere_2.jpg">
+			<div class="container">
+			</div>
+		</div>
+		<div class="forecast-table">
+			<div class="container">
+				<div class="forecast-container">
+					<div class="today forecast">
+						<div class="forecast-header">
+							<div class="day">Aujourd'hui</div>
+						</div>
+						<!-- meteo du jour -->
+						<div class="forecast-content">
+							<div id="city_name"></div>
+							<div class="degree">
+								<div class="num" id="temperature"></div>
+								<div class="forecast-icon">
+									<img id="weather_picture" src="" alt="" width=90>
+								</div>	
+							</div>
+							<span id="humidity"></span>
+							<span id="wind"></span>
+							<span id="pressure"></span>
+						</div>
+					</div>
 
-                    <div>
-                    <input type="radio" id="non" name="valid" value="non">
-                    <label for="non">non</label>
-                    </div>
-
-                    <input type="submit" value="Envoyer!">
-                </form>
-            </div>
-            <div id="contact_right"></div>
-        </div>
-    </div>
-
-    <?php include('includes/footer.php') ?>
+					<!-- meteo des jours suivant -->
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day">Demain</div>
+						</div>
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img id="weather_picture2" src="" alt="" width=48>
+							</div>
+							<div class="degree" id="temperature2"></div>
+							<small id="desc2"></small>
+						</div>
+					</div>
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day" id="day3"></div>
+						</div> 
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img id="weather_picture3" src="" alt="" width=48>
+							</div>
+							<div class="degree" id="temperature3"></div>
+							<small id="desc3"></small>
+						</div>
+					</div>
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day" id="day4"></div>
+						</div> 
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img id="weather_picture4" src="" alt="" width=48>
+							</div>
+							<div class="degree" id="temperature4"></div>
+							<small id="desc4"></small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<main class="main-content">
+			<div class="fullwidth-block">
+				<div class="container">
+					<h2 class="section-title">Derniers Articles</h2>
+					<div class="row">
+						<!-- affiche les 4 derniers posts -->
+						<?php while($data = $lastPost->fetch()):?>
+						<div class="col-md-3 col-sm-6">
+							<div class="live-camera">
+								<a href="index.php?p=post&id=<?=$data['id']; ?>"><figure class="live-camera-cover"><img src="<?= $data['lien_image']; ?>" alt=""></figure></a>
+								<h3 class="location"><?= $data['preview']; ?></h3>
+								<small class="date"><?=$data['creation_date_fr']; ?></small>
+							</div>
+						</div>
+						<?php endwhile; ?>
+					</div>
+				</div>
+			</div>
+		</main>
+		
+		<!-- script de la meteo -->
+		<script src="asset/js/ajax_get.js"></script>
+		<script src="asset/js/Weather.js"></script>
+		<?php include('includes/footer.php'); ?>
+		

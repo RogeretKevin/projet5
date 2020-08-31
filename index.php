@@ -1,21 +1,39 @@
+<!-- ROOTER FRONTEND -->
 <?php
 require('controller/controllerFrontend.php');
 
-if (!isset($_GET['p']) || $_GET['p'] == "home") {
+if (!isset($_GET['p'])):
     home();
-}
+else:
 
-// AFFICHE LE CHAPITRE //
-else if ($_GET['p'] == 'post') {
-    if (isset($_GET['id']) && $_GET['id'] > 0) {
-        post();
-    }
-    else {
-        header('location:index.php?p=post&id=1');
-    }
-}
+    switch ($_GET['p']):
 
-// SAUVEGARDE LES MESSAGE DU FORMULAIRE //
-else if ($_GET['p'] == 'form') {
-    form();
-}
+        case "post":
+            post();
+        break;
+
+        case "form":
+            form();
+        break;
+
+        case "contact":
+            require("views/contact.php");
+        break;
+
+        case "news":
+            news();
+        break;
+
+        case "comment":
+            comment();
+        break;
+
+        case "report":
+            report();
+        break;
+
+        default:
+            require('views/404.php');
+        
+    endswitch;
+endif;
