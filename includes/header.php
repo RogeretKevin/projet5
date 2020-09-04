@@ -10,7 +10,6 @@
 		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet" type="text/css">
 		
 		<!-- css -->
-		<link rel="stylesheet" href="asset/css/my-css.css">
 		<link rel="stylesheet" href="asset/css/style.css">
 	</head>
 

@@ -8,10 +8,11 @@ function home()
     $modelBackend = new Projet5\ModelBackend;
     $countPost = $modelBackend->countPost()[0];
     $countMessage = $modelBackend->countMessage()[0];
-    $countComment = $modelBackend->countComment()[0];
+    $countComment = $modelBackend->countComments()[0];
     require('views/dashboard.php');
 }
 
+// ------------------------------------------ARTICLES-----------------------------------------------
 //LISTE DES ARTICLES
 function articlesList()
 {
@@ -42,13 +43,17 @@ function viewEdit()
 function edit()
 {
     $modelBackend = new Projet5\ModelBackend;
-    $targetDir = "../asset/images_posts/";
-    $targetDirRelativeToSite = "./asset/images_posts/";
-    $fileName = basename($_FILES["file"]["name"]);
-    $targetFilePath = $targetDir . $fileName;
-    $targetFilePathForSite = $targetDirRelativeToSite . $fileName;
-
-    move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath);
+    if(strlen($_FILES["file"]["name"]) == 0):
+        $targetFilePathForSite = $_POST['image'];
+    else:
+        $targetDir = "../asset/images_posts/";
+        $targetDirRelativeToSite = "./asset/images_posts/";
+        $fileName = basename($_FILES["file"]["name"]);
+        $targetFilePath = $targetDir . $fileName;
+        $targetFilePathForSite = $targetDirRelativeToSite . $fileName;
+        $targetFilePathForSite = $targetDirRelativeToSite . $fileName;
+        move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath);
+    endif;
     $modelBackend->editPost(htmlspecialchars($_POST['newtitle']), strip_tags($_POST['newtext']), strip_tags($_POST['id']), $targetFilePathForSite);
     header('location:index.php?p=list&page=1');
 }
@@ -67,6 +72,58 @@ function create()
     header('location:index.php?p=list&page=1');
 }
 
+//SUPPRIME UN ARTICLE
+function deletePosts()
+{
+    $modelBackend = new Projet5\ModelBackend;
+    $modelBackend->deletePost($_GET['id']);
+    header('location:index.php?p=list&page=1');
+}
+
+// -----------------------------------------------COMMENTAIRES------------------------------------------
+//LISTE DES COMMENTAIRES
+function comment()
+{
+    $modelBackend = new Projet5\ModelBackend;
+    $count = intval($modelBackend->countComment($_GET['id'])[0]);
+    $limit = 5;
+    $page = intval($_GET['page']);
+    $nbPages = ceil($count / $limit);
+    if ($page < 1 OR $page > $nbPages):
+        $page = 1;
+    endif;
+    $offset = $limit * ($page - 1);
+    $next = $page + 1;
+    $previous = $page - 1;
+    $listComment = $modelBackend->getListComments($_GET['id'], $limit, $offset);
+    require('views/liste_comment.php');
+}
+
+//LECTURE DE COMMENTAIRE
+function readComment()
+{
+    $modelBackend = new Projet5\ModelBackend;
+    $comment = $modelBackend->getComment($_GET['id']);
+    require('views/read-comment.php');
+}
+
+//VALIDE UN COMMENTAIRE
+function validComments()
+{
+    $modelBackend = new Projet5\ModelBackend;
+    $post = $modelBackend->validComment($_GET['id']);
+    header('location:index.php?p=read_comment&id=' . $_GET['id']);
+}
+
+//SUPPRIME UN COMMENTAIRE
+function deleteComments()
+{
+    $modelBackend = new Projet5\ModelBackend;
+    $modelBackend->deleteComment($_GET['id']);
+    header('location:index.php?p=comment&page=1&id=' . $_GET['id']);
+}
+
+// -----------------------------------------MESSAGES-------------------------------------------
 //LISTE DES MESSAGES
 function messagesList()
 {
@@ -94,14 +151,6 @@ function readMessage()
     require('views/read-mail.php');
 }
 
-//SUPPRIME UN ARTICLE
-function deletePosts()
-{
-    $modelBackend = new Projet5\ModelBackend;
-    $modelBackend->deletePost($_GET['id']);
-    header('location:index.php?p=list&page=1');
-}
-
 //SUPPRIME UN MESSAGE
 function deleteMessages()
 {
@@ -110,6 +159,7 @@ function deleteMessages()
     header('location:index.php?p=message&page=1');
 }
 
+// ---------------------------------------------LOG-----------------------------------------------
 //LOGIN
 function login()
 {

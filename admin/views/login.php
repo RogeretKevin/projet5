@@ -25,7 +25,7 @@
       <!-- formulaire -->
       <form action="index.php?p=login" method="post">
         <div class="input-group mb-3">
-          <input type="text" name="pseudo" class="form-control" placeholder="Pseudo">
+          <input type="text" name="pseudo" class="form-control" placeholder="Pseudo" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <i class="fas fa-user"></i>
@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="pass" class="form-control" placeholder="Mot de passe">
+          <input type="password" name="pass" class="form-control" placeholder="Mot de passe" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>

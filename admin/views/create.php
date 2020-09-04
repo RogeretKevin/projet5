@@ -44,7 +44,7 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
                       <i class="fas fa-paperclip"></i> Image
                       <input type="file" name="file" accept="image/*" required>
                     </div>
-                    <p class="help-block">PNG, JPEG</p>
+                    <p class="help-block">Format image seulement !</p>
                   </div>
                 </div>
                 <div class="card-footer">

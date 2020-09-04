@@ -80,7 +80,6 @@
                   <i class="nav-icon far fa-envelope"></i>
                   <p>
                     Messages
-                    <span class="badge badge-info right">5</span>
                   </p>
                 </a>
               </li>

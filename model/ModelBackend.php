@@ -18,6 +18,7 @@ class ModelBackend
         }
     }
 
+    // ------------------------------------------ARTICLES-----------------------------------------------
     //RECUPERE LE LISTE DES ARTICLES
     public function getListPosts($limit, $offset)
     {
@@ -92,12 +93,47 @@ class ModelBackend
         }
     }
 
+    //SUPPRIME UN ARTICLE
+    public function deletePost($postId)
+    {
+        try
+        {
+            $db = $this->dbConnect();
+            $req = $db->prepare('DELETE FROM posts WHERE id= :idcomment');
+            $req->execute(array(
+                'idcomment' => $postId
+            ));
+            return $req;
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
+    //COMPTE LE NOMBRE D'ARTICLES
+    public function countPost()
+    {
+        try
+        {
+            $db = $this->dbConnect();
+            $req = $db->query('SELECT COUNT(id) FROM posts');
+            $result = $req->fetch();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
+    // ------------------------------------------MESSAGES-----------------------------------------------
     //RECUPERE LA LISTE DES MESSAGES
     public function getListMessages($limit, $offset)
     {
         try{
             $db = $this->dbConnect();
-            $req = $db->prepare('SELECT id, name, email, IF(CHAR_LENGTH(message) > 50, CONCAT(LEFT(message, 50), " ..."), message) AS preview, DATE_FORMAT(message_date, \'%d/%m/%Y\') AS creation_date_fr, resident, lu FROM form ORDER BY message_date ASC LIMIT :limit OFFSET :offset');
+            $req = $db->prepare('SELECT id, name, email, IF(CHAR_LENGTH(message) > 50, CONCAT(LEFT(message, 50), " ..."), message) AS preview, DATE_FORMAT(message_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, resident, lu FROM form ORDER BY message_date ASC LIMIT :limit OFFSET :offset');
             $req->bindValue(':limit', $limit, \PDO::PARAM_INT);
             $req->bindValue(':offset', $offset, \PDO::PARAM_INT);
             $req->execute();
@@ -114,7 +150,7 @@ class ModelBackend
     {
         try{
             $db = $this->dbConnect();
-            $req = $db->prepare('SELECT * FROM form WHERE id = ?');
+            $req = $db->prepare('SELECT id, name, email, message, DATE_FORMAT(message_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, resident, lu FROM form WHERE id = ?');
             $req->execute(array($messageId));
             $post = $req->fetch();
             return $post;
@@ -141,24 +177,6 @@ class ModelBackend
         }
     }
 
-    //SUPPRIME UN ARTICLE
-    public function deletePost($postId)
-    {
-        try
-        {
-            $db = $this->dbConnect();
-            $req = $db->prepare('DELETE FROM posts WHERE id= :idcomment');
-            $req->execute(array(
-                'idcomment' => $postId
-            ));
-            return $req;
-        }
-        catch(Exception $e)
-        {
-            die('Erreur : '.$e->getMessage());
-        }
-    }
-
     //SUPPRIME UN MESSAGE
     public function deleteMessage($messageId)
     {
@@ -170,23 +188,6 @@ class ModelBackend
                 'idcomment' => $messageId
             ));
             return $req;
-        }
-        catch(Exception $e)
-        {
-            die('Erreur : '.$e->getMessage());
-        }
-    }
-
-    //LOGIN
-    public function checkpseudo($pseudo)
-    {
-        try
-        {
-            $db = $this->dbConnect();
-            $req = $db->prepare('SELECT id, password FROM users WHERE pseudo = :pseudo');
-            $req->execute(array('pseudo' => $pseudo));
-            $resultat = $req->fetch();
-            return $resultat;
         }
         catch(Exception $e)
         {
@@ -210,13 +211,14 @@ class ModelBackend
         }
     }
 
-    //COMPTE LE NOMBRE D'ARTICLES
-    public function countPost()
+    // ------------------------------------------COMMENTAIRES-----------------------------------------------
+    //COMPTE LE NOMBRE DE COMMENTAIRES
+    public function countComments()
     {
         try
         {
             $db = $this->dbConnect();
-            $req = $db->query('SELECT COUNT(id) FROM posts');
+            $req = $db->query('SELECT COUNT(id) FROM comments');
             $result = $req->fetch();
             return $result;
         }
@@ -226,15 +228,100 @@ class ModelBackend
         }
     }
 
-    //COMPTE LE NOMBRE DE COMMENTAIRES
-    public function countComment()
+    //COMPTE LE NOMBRE DE COMMENTAIRES PAR ID
+    public function countComment($id)
     {
         try
         {
             $db = $this->dbConnect();
-            $req = $db->query('SELECT COUNT(id) FROM comments');
+            $req = $db->prepare('SELECT COUNT(id) FROM comments WHERE id_post = ?');
+            $req->execute(array($id));
             $result = $req->fetch();
             return $result;
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
+    //RECUPERE LA LISTE DES COMMENTAIRES
+    public function getListComments($id, $limit, $offset)
+    {
+        try{
+            $db = $this->dbConnect();
+            $req = $db->prepare('SELECT id, id_post, pseudo, IF(CHAR_LENGTH(comment) > 50, CONCAT(LEFT(comment, 50), " ..."), comment) AS preview, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, report FROM comments WHERE id_post = :id ORDER BY comment_date ASC LIMIT :limit OFFSET :offset');
+            $req->bindValue(':id', $id, \PDO::PARAM_INT);
+            $req->bindValue(':limit', $limit, \PDO::PARAM_INT);
+            $req->bindValue(':offset', $offset, \PDO::PARAM_INT);
+            $req->execute();
+            return $req;
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
+    //RECUPERE COMMENTAIRE PAR ID
+    public function getComment($id)
+    {
+        try{
+            $db = $this->dbConnect();
+            $req = $db->prepare('SELECT id, id_post, pseudo, comment, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, report FROM comments WHERE id = ?');
+            $req->execute(array($id));
+            $post = $req->fetch();
+            return $post;
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
+    //SUPPRIME UN COMMENTAIRE
+    public function deleteComment($id)
+    {
+        try
+        {
+            $db = $this->dbConnect();
+            $req = $db->prepare('DELETE FROM comments WHERE id= ?');
+            $req->execute(array($id));  
+            return $req;
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
+    //VALIDE UN COMMENTAIRE
+    public function validComment($id)
+    {
+        try{
+            $db = $this->dbConnect();
+            $req = $db->prepare('UPDATE comments SET report = -1 WHERE id = ?');
+            $req->execute(array($id));
+            $post = $req->fetch();
+            return $post;
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
+    // ------------------------------------------LOG-----------------------------------------------
+    //LOGIN
+    public function checkpseudo($pseudo)
+    {
+        try
+        {
+            $db = $this->dbConnect();
+            $req = $db->prepare('SELECT id, password FROM users WHERE pseudo = :pseudo');
+            $req->execute(array('pseudo' => $pseudo));
+            $resultat = $req->fetch();
+            return $resultat;
         }
         catch(Exception $e)
         {

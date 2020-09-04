@@ -40,12 +40,13 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
                       <textarea id="compose-textarea" class="form-control" name="newtext" style="height: 300px" required><?= $post['content'] ?></textarea>
                   </div>
                   <input type="hidden" name="id" value="<?= $post['id'] ?>">
+                  <input type="hidden" name="image" value="<?= $post['lien_image'] ?>">
                   <div class="form-group">
                     <div class="btn btn-default btn-file">
                       <i class="fas fa-paperclip"></i> Image
                       <input type="file" name="file" accept="image/*">
                     </div>
-                    <p class="help-block">PNG, JPEG</p>
+                    <p class="help-block">Format image seulement !</p>
                   </div>
                 </div>
                 <div class="card-footer">
@@ -65,3 +66,5 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
   else:
     header('location:index.php?p=login_page');
   endif;
+
+  var_dump($post['lien_image']) ;

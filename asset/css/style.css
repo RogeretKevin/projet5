@@ -1,12 +1,23 @@
-/*!
- * Project_Name: Weather
- * Author: Themezy
- * Email: contact[at]themezy.com
- * Url: http://www.themezy.com
- */
-/*=========================================== 
- * Importing CSS Libraries
- *===========================================*/
+/* CSS FRONTEND */
+
+#ul-comment,
+#ul-form {
+  color: red;
+  margin-bottom: 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+#test2 {
+  word-break: break-word;
+}
+
+#valid {
+  width: 1%;
+}
+
 .logo {
   height: 50px;
   width: 50px;
@@ -1386,7 +1397,9 @@ form textarea {
       width: 100%;
       height: auto;
       max-width: 100%;
-      border-radius: 5px; }
+      border-radius: 5px;
+      min-height: 260px;
+      max-height: 370px; }
   .live-camera .location {
     margin-bottom: 5px;
     color: white;
@@ -1462,7 +1475,9 @@ form textarea {
   border-radius: 40px;
   padding: 20px 30px;
   font-size: 13px;
-  font-size: 0.9285714286em; }
+  font-size: 0.9285714286em;
+  overflow: hidden; 
+  text-overflow: ellipsis; }
   .breadcrumb a {
     color: #bfc1c8; }
     .breadcrumb a:after {
@@ -1497,7 +1512,9 @@ form textarea {
       max-width: 100%;
       height: auto;
       border-radius: 5px;
-      display: block; }
+      display: block;
+      min-height: 560px;
+      max-height: 600px; }
   .post p {
     margin-bottom: 30px; }
 

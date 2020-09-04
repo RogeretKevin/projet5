@@ -11,7 +11,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="content col-md-8 col-md-push-2 col-sm-12">
-						<!-- affiche la liste des posts -->
+						<!-- affiche la liste des articles -->
 						<?php while ($data = $post->fetch()): ?>
 							<div class="post">
 								<h2 class="entry-title"><?= $data['title']; ?></h2>

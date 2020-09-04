@@ -39,8 +39,24 @@ else:
             deletePosts();
         break;
 
+        case "valid_comment":
+            validComments();
+        break;
+
         case "delete_message":
             deleteMessages();
+        break;
+
+        case "delete_comment":
+            deleteComments();
+        break;
+
+        case "comment":
+            comment();
+        break;
+
+        case "read_comment":
+            readComment();
         break;
 
         case "login_page":

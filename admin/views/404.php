@@ -30,7 +30,7 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
           <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oups! Page non trouvée.</h3>
 
           <p>
-            Nous n'avons pas trouvé la page que vous cherchiez.
+            Nous n'avons pas trouvé la page que vous cherchez.
             En attendant, vous pouvez <a href="index.php">retourner au dashboard</a>.
           </p>
         </div>

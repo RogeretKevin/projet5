@@ -58,6 +58,7 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
                   </tr>
               </thead>
               <tbody>
+                  <!-- articles -->
                   <?php while ($data = $listArticles->fetch()): ?>
                   <tr>
                       <td>
@@ -86,6 +87,11 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
                               <i class="fas fa-trash">
                               </i> 
                               Supprimer
+                          </a>
+                          <a class="btn btn-warning btn-sm" href="index.php?p=comment&amp;page=1&amp;id=<?= $data['id'] ?>">
+                              <i class="far fa-comments"></i>
+                              </i> 
+                              Commentaires
                           </a>
                       </td>
                   </tr>

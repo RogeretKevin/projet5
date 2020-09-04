@@ -10,12 +10,12 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Message</h1>
+            <h1>Commentaire</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-              <li class="breadcrumb-item active">Message</li>
+              <li class="breadcrumb-item active">Commentaire</li>
             </ol>
           </div>
         </div>
@@ -27,23 +27,23 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
         <div class="col-md-12">
           <div class="card card-primary card-outline">
             <div class="card-header">
-              <h3 class="card-title">Lire Message</h3>
+              <h3 class="card-title">Lire Commentaire</h3>
             </div>
             <div class="card-body p-0">
               <div class="mailbox-read-info">
-                <h5><?= $message['name'] ?></h5>
-                <h6>Resident de la ville : <?= $message['resident'] ?>
-                  <span class="mailbox-read-time float-right"><?= $message['creation_date_fr'] ?></span></h6>
+                <h5><?= $comment['pseudo'] ?></h5>
+                <h6>Nombre de report : <?php if($comment['report'] == -1):?><i class="far fa-check-circle"></i><?php else: echo $comment['report']; endif;?>
+                  <span class="mailbox-read-time float-right"><?= $comment['creation_date_fr'] ?></span></h6>
               </div>
               <div class="mailbox-read-message">
-                <p><?= $message['message'] ?></p>
+                <p><?= $comment['comment'] ?></p>
               </div>
             </div>
             <div class="card-footer">
               <div class="float-right">
-                <button type="button" onclick="location.href='mailto:<?= $message['email'] ?>'" class="btn btn-default"><i class="fas fa-reply"></i> Répondre</button>
+                <button type="button"<?php if($comment['report'] == -1):?>disabled<?php endif;?> onclick="location.href='index.php?p=valid_comment&id=<?= $comment['id'] ?>'" class="btn btn-default"><i class="far fa-check-circle"></i> Valider</button>
               </div>
-              <button type="button" onclick="location.href='index.php?p=delete_message&id=<?= $message['id'] ?>'" class="btn btn-default"><i class="far fa-trash-alt"></i> Supprimer</button>
+              <button type="button" onclick="location.href='index.php?p=delete_comment&id=<?= $comment['id'] ?>'" class="btn btn-default"><i class="far fa-trash-alt"></i> Supprimer</button>
             </div>
           </div>
         </div>

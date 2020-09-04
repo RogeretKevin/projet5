@@ -26,22 +26,34 @@ class Weather {
         this.ajax = ajaxGet("http://api.openweathermap.org/data/2.5/forecast?appid=33b19dd492795a91a0c5cfa59b4aa5d1&lang=fr&units=metric&q=" + city, function (reponse) {
             let weatherReponse = JSON.parse(reponse); //Traduit la reponse JSON en JavaScript
             this.location.innerHTML = "Meteo de " + weatherReponse.city.name;
-            this.picture.src = "http://openweathermap.org/img/w/" + weatherReponse.list[0].weather[0].icon + ".png";
+            let img = document.createElement("img");
+            img.setAttribute('width', '90');
+            img.src = "http://openweathermap.org/img/w/" + weatherReponse.list[0].weather[0].icon + ".png";
+            this.picture.appendChild(img);
             this.temp.innerHTML = Math.round(weatherReponse.list[0].main.temp) + "C°";
             this.wind.textContent = "Vent: " + Math.round(weatherReponse.list[0].wind.speed * 3,484) + " km/h";
             this.humidity.innerHTML = "Humidité: " + weatherReponse.list[0].main.humidity + " %"
             this.pressure.innerHTML = "Pression: " + weatherReponse.list[0].main.pressure + " hPa"
 
-            this.picture2.src = "http://openweathermap.org/img/w/" + weatherReponse.list[8].weather[0].icon + ".png";
+            let img2 = document.createElement("img");
+            img2.setAttribute('width', '48');
+            img2.src = "http://openweathermap.org/img/w/" + weatherReponse.list[8].weather[0].icon + ".png";
+            this.picture2.appendChild(img2);
             this.temp2.innerHTML = Math.round(weatherReponse.list[8].main.temp) + "C°";
             this.desc2.innerHTML = weatherReponse.list[8].weather[0].description;
 
-            this.picture3.src = "http://openweathermap.org/img/w/" + weatherReponse.list[16].weather[0].icon + ".png";
+            let img3 = document.createElement("img");
+            img3.setAttribute('width', '48');
+            img3.src = "http://openweathermap.org/img/w/" + weatherReponse.list[16].weather[0].icon + ".png";
+            this.picture3.appendChild(img3);
             this.temp3.innerHTML = Math.round(weatherReponse.list[16].main.temp) + "C°";
             this.desc3.innerHTML = weatherReponse.list[16].weather[0].description;
             this.day3.innerHTML = weatherReponse.list[16].dt_txt.substring(0, 10);
 
-            this.picture4.src = "http://openweathermap.org/img/w/" + weatherReponse.list[24].weather[0].icon + ".png";
+            let img4 = document.createElement("img");
+            img4.setAttribute('width', '48');
+            img4.src = "http://openweathermap.org/img/w/" + weatherReponse.list[24].weather[0].icon + ".png";
+            this.picture4.appendChild(img4);
             this.temp4.innerHTML = Math.round(weatherReponse.list[24].main.temp) + "C°";
             this.desc4.innerHTML = weatherReponse.list[24].weather[0].description;
             this.day4.innerHTML = weatherReponse.list[24].dt_txt.substring(0, 10);

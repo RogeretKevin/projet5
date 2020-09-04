@@ -10,7 +10,15 @@ function home()
     require('views/home.php');
 }
 
-//AFFICHE LE POST PAR ID
+// ------------------------------------------ARTICLES-----------------------------------------------
+//RECUPERE LES ARTICLES
+function news(){
+    $modelFrontend = new Projet5\ModelFrontend;
+    $post = $modelFrontend->getPosts();
+    require("views/news.php");
+}
+
+//AFFICHE L'ARTICLE PAR ID
 function post()
 {
     $modelFrontend = new Projet5\ModelFrontend;
@@ -20,49 +28,7 @@ function post()
     require('views/single.php');
 }
 
-//ENVOIE DE MESSAGE DEPUIS LE FORMULAIRE
-function form()
-{
-    $modelFrontend = new Projet5\ModelFrontend;
-
-    $error = array();
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $message = $_POST['message'];
-
-    if (!preg_match('/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ]+$/', $name)):
-        array_push($error, "Votre non comporte des chiffres ou des caractères spéciaux");
-    endif;
-    if (!preg_match('/^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/', $email)):
-        array_push($error, "Entrez une adresse email valide !");
-    endif;
-    if(empty($name) OR empty($email) OR empty($message)):
-        array_push($error, "Veuillez entrer toutes les informations !");
-    endif;
-    if(strlen($name) > 30):
-        array_push($error, "Votre nom comporte plus de 30 caractères !");
-    endif;
-    if(strlen($message) > 255):
-        array_push($error, "Votre message comporte plus de 255 caractères !");
-    endif;
-    if(empty($error)):
-        if(!isset($_POST['valid'])):
-        $_POST['valid'] = "non";
-        endif;
-        $modelFrontend->messageForm(htmlspecialchars($_POST['name']), htmlspecialchars($_POST['email']), htmlspecialchars($_POST['message']), $_POST['valid']);
-        header('location:index.php?p=contact');
-        exit;
-    endif;
-    require('views/contact.php');
-}
-
-//RECUPERE LES ARTICLES
-function news(){
-    $modelFrontend = new Projet5\ModelFrontend;
-    $post = $modelFrontend->getPosts();
-    require("views/news.php");
-}
-
+// -------------------------------------------COMMENTAIRES----------------------------------------------
 //AJOUTE UN COMMENTAIRE
 function comment()
 {
@@ -100,4 +66,41 @@ function report()
     $modelFrontend->reportComment($_GET['idcomment']);
     $post = $modelFrontend->getPost($_GET['id']);
     header('location:index.php?p=post&id=' . $post['id'] .'#comment');
+}
+
+// ------------------------------------------------------------MESSAGES----------------------------------------
+//ENVOIE DE MESSAGE DEPUIS LE FORMULAIRE
+function form()
+{
+    $modelFrontend = new Projet5\ModelFrontend;
+
+    $error = array();
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $message = $_POST['message'];
+
+    if (!preg_match('/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ]+$/', $name)):
+        array_push($error, "Votre non comporte des chiffres ou des caractères spéciaux");
+    endif;
+    if (!preg_match('/^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/', $email)):
+        array_push($error, "Entrez une adresse email valide !");
+    endif;
+    if(empty($name) OR empty($email) OR empty($message)):
+        array_push($error, "Veuillez entrer toutes les informations !");
+    endif;
+    if(strlen($name) > 30):
+        array_push($error, "Votre nom comporte plus de 30 caractères !");
+    endif;
+    if(strlen($message) > 255):
+        array_push($error, "Votre message comporte plus de 255 caractères !");
+    endif;
+    if(empty($error)):
+        if(!isset($_POST['valid'])):
+        $_POST['valid'] = "non";
+        endif;
+        $modelFrontend->messageForm(htmlspecialchars($_POST['name']), htmlspecialchars($_POST['email']), htmlspecialchars($_POST['message']), $_POST['valid']);
+        header('location:index.php?p=contact');
+        exit;
+    endif;
+    require('views/contact.php');
 }

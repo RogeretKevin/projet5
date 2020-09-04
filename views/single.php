@@ -15,7 +15,7 @@
 						<div class="post single">
 							<!-- post -->
 							<h2 class="entry-title"><?= $post['title']; ?></h2>
-							<div class="featured-image"><img src="<?= $post['lien_image']; ?>" alt=""></div>
+							<div class="featured-image"><img src="<?= $post['lien_image']; ?>" alt="image_du_post"></div>
 							<div class="entry-content">
 								<p><?= $post['content']; ?></p>
 							</div>
@@ -60,20 +60,19 @@
 					<?php else: ?>
 						<div class="content col-md-8 col-md-push-2 col-sm-12">
 							<!-- commentaires -->
-							<?php while ($data = $comments->fetch()):
-								if($data['report'] < 10): ?>
+							<?php while ($data = $comments->fetch()): ?>
 									<div class="alert alert-secondary">
 										<p><strong><?= $data['pseudo']; ?></strong> le <span><?= $data['comment_date_fr']; ?> </span> - 
 										<!-- boutton report -->
 										<?php if($data['report'] >= 0):?>
-											<a href="index.php?p=report&amp;id=<?= $post['id'];?>&amp;idcomment=<?= $data['id'];?>"><i
+											<a id="verrou" href="index.php?p=report&amp;id=<?= $post['id'];?>&amp;idcomment=<?= $data['id'];?>"><i
 											class="fas fa-flag"></i> Signalé</a> <?php else:?>
 											<i class="fas fa-check-circle"></i> <?php endif; ?></p>
 										<p id="test2"><?= $data['comment']; ?></p>
 										<hr>
 										</br>
 									</div>
-							<?php endif; endwhile; ?>
+							<?php endwhile; ?>
 						</div>						
 					<?php endif; ?>
 				</div>
