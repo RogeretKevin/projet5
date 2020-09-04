@@ -1,5 +1,9 @@
 /* CSS FRONTEND */
 
+.error-front {
+  min-height: 61vh;
+}
+
 #ul-comment,
 #ul-form {
   color: red;
