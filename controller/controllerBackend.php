@@ -76,8 +76,13 @@ function create()
 function deletePosts()
 {
     $modelBackend = new Projet5\ModelBackend;
-    $modelBackend->deletePost($_GET['id']);
-    header('location:index.php?p=list&page=1');
+    session_start();
+    if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['admin'])):
+        $modelBackend->deletePost($_GET['id']);
+        header('location:index.php?p=list&page=1');
+    else:
+        header('location:index.php?p=login_page');
+    endif;
 }
 
 // -----------------------------------------------COMMENTAIRES------------------------------------------
