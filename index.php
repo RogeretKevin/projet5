@@ -2,11 +2,12 @@
 <?php
 require('controller/controllerFrontend.php');
 
-if (!isset($_GET['p'])):
+if (!isset($_GET['p'])){
     home();
-else:
+}
+else{
 
-    switch ($_GET['p']):
+    switch ($_GET['p']){
 
         case "post":
             post();
@@ -17,7 +18,7 @@ else:
         break;
 
         case "contact":
-            require("views/contact.php");
+            contact();
         break;
 
         case "news":
@@ -33,7 +34,6 @@ else:
         break;
 
         default:
-            require('views/404.php');
-        
-    endswitch;
-endif;
+            qcq();
+    }  
+}

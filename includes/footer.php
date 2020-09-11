@@ -7,11 +7,11 @@
 						<div class="social-links text-center">
 							<a href="#"><i class="fa fa-facebook"></i></a>
 							<a href="#"><i class="fa fa-twitter"></i></a>
-							<a href="#"><i class="fa fa-google-plus"></i></a>
-							<a href="#"><i class="fa fa-pinterest"></i></a>
+							<a href="#"><i class="fab fa-youtube"></i></a>
+							<a href="https://github.com/RogeretKevin/projet5"><i class="fab fa-github"></i></i></a>
 						</div>
 					</div>
-					<p class="text-center">Site non officiel réaliser dans le cadre d'une formation</p>
+					<p class="text-center">Site non officiel réalisé dans le cadre d'une formation</p>
 				</div>
 			</div>		
 		</footer>

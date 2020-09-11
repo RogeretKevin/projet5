@@ -44,7 +44,7 @@
 						</div>
 					</div>
 					<input name="id_post" type="hidden" value="<?= $post['id']; ?>">
-				</form></br>
+				</form><br>
 				<!-- erreur validation -->
 				<ul class="content col-md-8 col-md-push-2 col-sm-12" id="ul-comment">
 					<?php if(!empty($error)): 
@@ -65,12 +65,12 @@
 										<p><strong><?= $data['pseudo']; ?></strong> le <span><?= $data['comment_date_fr']; ?> </span> - 
 										<!-- boutton report -->
 										<?php if($data['report'] >= 0):?>
-											<a id="verrou" href="index.php?p=report&amp;id=<?= $post['id'];?>&amp;idcomment=<?= $data['id'];?>"><i
-											class="fas fa-flag"></i> Signalé</a> <?php else:?>
+											<a id="verrou" onclick="return report()" href="index.php?p=report&amp;id=<?= $post['id'];?>&amp;idcomment=<?= $data['id'];?>"><i
+											class="fas fa-flag"></i> Signaler</a> <?php else:?>
 											<i class="fas fa-check-circle"></i> <?php endif; ?></p>
-										<p id="test2"><?= $data['comment']; ?></p>
+										<p class="test2"><?= $data['comment']; ?></p>
 										<hr>
-										</br>
+										<br>
 									</div>
 							<?php endwhile; ?>
 						</div>						

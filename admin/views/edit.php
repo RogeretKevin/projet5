@@ -34,19 +34,20 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
               <form method="post" action="index.php?p=edit" enctype="multipart/form-data">
                 <div class="card-body">
                   <div class="form-group">
-                    <input class="form-control" placeholder="Titre:" name="newtitle" value="<?= $post['title'] ?>" required>
+                    <input class="form-control" placeholder="Titre:" name="newtitle" required="required" value=<?php if(isset($title)): echo $title;else: echo $post['title']; endif; ?>>
                   </div>
                   <div class="form-group">
-                      <textarea id="compose-textarea" class="form-control" name="newtext" style="height: 300px" required><?= $post['content'] ?></textarea>
+                      <textarea id="compose-textarea" class="form-control" name="newtext" style="height: 300px" required="required"><?php if(isset($content)): echo $content;else: echo $post['content']; endif; ?></textarea>
                   </div>
-                  <input type="hidden" name="id" value="<?= $post['id'] ?>">
-                  <input type="hidden" name="image" value="<?= $post['lien_image'] ?>">
+                  <input type="hidden" name="id" value=<?php if(isset($id)): echo $id;else: echo $post['id']; endif; ?>>
+                  <input type="hidden" name="image" value=<?php if(isset($image)): echo $image;else: echo $post['lien_image']; endif; ?>>
                   <div class="form-group">
                     <div class="btn btn-default btn-file">
                       <i class="fas fa-paperclip"></i> Image
                       <input type="file" name="file" accept="image/*">
                     </div>
                     <p class="help-block">Format image seulement !</p>
+                    <?php if(isset($error)):?> <p class="text-danger"><i class="fas fa-exclamation-circle"></i> Un fichier au format Image est attendu</p> <?php endif; ?>
                   </div>
                 </div>
                 <div class="card-footer">
@@ -66,5 +67,3 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
   else:
     header('location:index.php?p=login_page');
   endif;
-
-  var_dump($post['lien_image']) ;

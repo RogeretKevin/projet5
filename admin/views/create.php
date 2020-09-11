@@ -34,10 +34,10 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
               <form method="post" action="index.php?p=create" enctype="multipart/form-data">
                 <div class="card-body">
                   <div class="form-group">
-                    <input class="form-control" placeholder="Titre:" name="title" required>
+                    <input class="form-control" placeholder="Titre:" name="title" required="required" value=<?php if(isset($title)): echo $title; endif; ?>>
                   </div>
                   <div class="form-group">
-                      <textarea id="compose-textarea" class="form-control" name="content" style="height: 300px" placeholder="Contenu:" required></textarea>
+                      <textarea id="compose-textarea" class="form-control" name="content" style="height: 300px" placeholder="Contenu:" required="required"><?php if(isset($content)): echo $content; endif; ?></textarea>
                   </div>
                   <div class="form-group">
                     <div class="btn btn-default btn-file">
@@ -45,6 +45,7 @@ if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['a
                       <input type="file" name="file" accept="image/*" required>
                     </div>
                     <p class="help-block">Format image seulement !</p>
+                    <?php if(isset($error)):?> <p class="text-danger"><i class="fas fa-exclamation-circle"></i> Un fichier au format Image est attendu</p> <?php endif; ?>
                   </div>
                 </div>
                 <div class="card-footer">

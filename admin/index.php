@@ -2,17 +2,18 @@
 <?php
 require('../controller/controllerBackend.php');
 
-if (!isset($_GET['p'])):
+if (!isset($_GET['p'])){
     home();
-else:
-    switch ($_GET['p']):
+}
+else{
+    switch ($_GET['p']){
 
         case "list":
             articlesList();
         break;
 
         case "view_create":
-            require('views/create.php');
+            viewCreate();
         break;
 
         case "create":
@@ -60,7 +61,7 @@ else:
         break;
 
         case "login_page":
-            require('views/login.php');
+            viewLogin();
         break;
 
         case "login":
@@ -72,7 +73,7 @@ else:
         break;
 
         default:
-            require('views/404.php');
+            qcq();
         
-    endswitch;
-endif;
+    }
+}

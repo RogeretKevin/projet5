@@ -5,10 +5,12 @@ require "../vendor/autoload.php";
 //PAGE DU DASHBOARD
 function home()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $countPost = $modelBackend->countPost()[0];
-    $countMessage = $modelBackend->countMessage()[0];
-    $countComment = $modelBackend->countComments()[0];
+    $postManager = new Projet5\PostManager;
+    $messageManager = new Projet5\MessageManager;
+    $commentManager = new Projet5\CommentManager;
+    $countPost = $postManager->countPost()[0];
+    $countMessage = $messageManager->countMessage()[0];
+    $countComment = $commentManager->countComments()[0];
     require('views/dashboard.php');
 }
 
@@ -16,182 +18,235 @@ function home()
 //LISTE DES ARTICLES
 function articlesList()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $count = intval($modelBackend->countPost()[0]);
+    $postManager = new Projet5\PostManager;
+    $count = intval($postManager->countPost()[0]);
     $limit = 5;
     $page = intval($_GET['page']);
     $nbPages = ceil($count / $limit);
-    if ($page < 1 OR $page > $nbPages):
+    if ($page < 1 OR $page > $nbPages){
         $page = 1;
-    endif;
+    }
     $offset = $limit * ($page - 1);
     $next = $page + 1;
     $previous = $page - 1;
-    $listArticles = $modelBackend->getListPosts($limit, $offset);
+    $listArticles = $postManager->getListPosts($limit, $offset);
     require('views/liste_articles.php');
 }
 
 //PAGE D'EDITION
 function viewEdit()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $post = $modelBackend->getPost($_GET['id']);
+    $postManager = new Projet5\PostManager;
+    $post = $postManager->getPost($_GET['id']);
     require('views/edit.php');
 }
 
 //MODIFIE L'ARTICLE
 function edit()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    if(strlen($_FILES["file"]["name"]) == 0):
+    $postManager = new Projet5\PostManager;
+    
+    if(strlen($_FILES["file"]["name"]) == 0){
         $targetFilePathForSite = $_POST['image'];
-    else:
-        $targetDir = "../asset/images_posts/";
-        $targetDirRelativeToSite = "./asset/images_posts/";
-        $fileName = basename($_FILES["file"]["name"]);
-        $targetFilePath = $targetDir . $fileName;
-        $targetFilePathForSite = $targetDirRelativeToSite . $fileName;
-        $targetFilePathForSite = $targetDirRelativeToSite . $fileName;
-        move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath);
-    endif;
-    $modelBackend->editPost(htmlspecialchars($_POST['newtitle']), strip_tags($_POST['newtext']), strip_tags($_POST['id']), $targetFilePathForSite);
-    header('location:index.php?p=list&page=1');
+        $postManager->editPost(htmlspecialchars($_POST['newtitle']), strip_tags($_POST['newtext']), strip_tags($_POST['id']), $targetFilePathForSite);
+        header('location:index.php?p=list&page=1');
+    }
+    else{
+        $infosfichier = pathinfo($_FILES['file']['name']);
+        $extension_upload = $infosfichier['extension'];
+        $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+        if (in_array($extension_upload, $extensions_autorisees)){
+            // Verification format image
+            $fileName = basename($_FILES["file"]["name"]);
+            $targetDir = "../asset/images_posts/";
+            $targetDirRelativeToSite = "./asset/images_posts/";
+            $targetFilePath = $targetDir . $fileName;
+            $targetFilePathForSite = $targetDirRelativeToSite . $fileName;
+            move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath);
+            $postManager->editPost(htmlspecialchars($_POST['newtitle']), strip_tags($_POST['newtext']), strip_tags($_POST['id']), $targetFilePathForSite);
+            header('location:index.php?p=list&page=1');
+        }
+        else{
+            $title = $_POST['newtitle'];
+            $content = $_POST['newtext'];
+            $id = $_POST['id'];
+            $image = $_POST['image'];
+            $error = true;
+            require('views/edit.php');
+        }
+    }
 }
 
 //CREER UN ARTICLE
 function create()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $targetDir = "../asset/images_posts/";
-    $targetDirRelativeToSite = "./asset/images_posts/";
-    $fileName = basename($_FILES["file"]["name"]);
-    $targetFilePath = $targetDir . $fileName;
-    $targetFilePathForSite = $targetDirRelativeToSite . $fileName;
-    move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath);
-    $modelBackend->createPost(strip_tags($_POST['title']), strip_tags($_POST['content']), $targetFilePathForSite);
-    header('location:index.php?p=list&page=1');
+    $postManager = new Projet5\PostManager;
+
+    // Verification format image
+    $infosfichier = pathinfo($_FILES['file']['name']);
+    $extension_upload = $infosfichier['extension'];
+    $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+
+    if (in_array($extension_upload, $extensions_autorisees)){
+        $fileName = basename($_FILES["file"]["name"]);
+        $targetDir = "../asset/images_posts/";
+        $targetDirRelativeToSite = "./asset/images_posts/";
+        $targetFilePath = $targetDir . $fileName;
+        $targetFilePathForSite = $targetDirRelativeToSite . $fileName;
+        move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath);
+        $postManager->createPost(strip_tags($_POST['title']), strip_tags($_POST['content']), $targetFilePathForSite);
+        header('location:index.php?p=list&page=1');
+    }
+    else{
+        $title = $_POST['title'];
+        $content = $_POST['content'];
+        $error = true;
+        require('views/create.php');
+    }
 }
 
 //SUPPRIME UN ARTICLE
 function deletePosts()
 {
-    $modelBackend = new Projet5\ModelBackend;
+    $postManager = new Projet5\PostManager;
     session_start();
-    if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['admin'])):
-        $modelBackend->deletePost($_GET['id']);
+    if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['admin'])){
+        $postManager->deletePost($_GET['id']);
         header('location:index.php?p=list&page=1');
-    else:
+    }
+    else{
         header('location:index.php?p=login_page');
-    endif;
+    }
+}
+
+//PAGE CREER UN ARTICLE
+function viewCreate()
+{
+    require('views/create.php');
 }
 
 // -----------------------------------------------COMMENTAIRES------------------------------------------
 //LISTE DES COMMENTAIRES
 function comment()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $count = intval($modelBackend->countComment($_GET['id'])[0]);
+    $commentManager = new Projet5\CommentManager;
+    $count = intval($commentManager->countComment($_GET['id'])[0]);
     $limit = 5;
     $page = intval($_GET['page']);
     $nbPages = ceil($count / $limit);
-    if ($page < 1 OR $page > $nbPages):
+    if ($page < 1 OR $page > $nbPages){
         $page = 1;
-    endif;
+    }
     $offset = $limit * ($page - 1);
     $next = $page + 1;
     $previous = $page - 1;
-    $listComment = $modelBackend->getListComments($_GET['id'], $limit, $offset);
+    $listComment = $commentManager->getListComments($_GET['id'], $limit, $offset);
     require('views/liste_comment.php');
 }
 
 //LECTURE DE COMMENTAIRE
 function readComment()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $comment = $modelBackend->getComment($_GET['id']);
+    $commentManager = new Projet5\CommentManager;
+    $comment = $commentManager->getComment($_GET['id']);
     require('views/read-comment.php');
 }
 
 //VALIDE UN COMMENTAIRE
 function validComments()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $post = $modelBackend->validComment($_GET['id']);
+    $commentManager = new Projet5\CommentManager;
+    $post = $commentManager->validComment($_GET['id']);
     header('location:index.php?p=read_comment&id=' . $_GET['id']);
 }
 
 //SUPPRIME UN COMMENTAIRE
 function deleteComments()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $modelBackend->deleteComment($_GET['id']);
-    header('location:index.php?p=comment&page=1&id=' . $_GET['id']);
+    $commentManager = new Projet5\CommentManager;
+    session_start();
+    if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['admin'])){
+        $commentManager->deleteComment($_GET['id']);
+        header('location:index.php?p=comment&page=1&id=' . $_GET['id']);
+    }
+    else{
+        header('location:index.php?p=login_page');
+    }
 }
 
 // -----------------------------------------MESSAGES-------------------------------------------
 //LISTE DES MESSAGES
 function messagesList()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $count = intval($modelBackend->countMessage()[0]);
+    $messageManager = new Projet5\MessageManager;
+    $count = intval($messageManager->countMessage()[0]);
     $limit = 5;
     $page = intval($_GET['page']);
     $nbPages = ceil($count / $limit);
-    if ($page < 1 OR $page > $nbPages):
+    if ($page < 1 OR $page > $nbPages){
         $page = 1;
-    endif;
+    }
     $offset = $limit * ($page - 1);
     $next = $page + 1;
     $previous = $page - 1;
-    $listMessages = $modelBackend->getListMessages($limit, $offset);
+    $listMessages = $messageManager->getListMessages($limit, $offset);
     require('views/mailbox.php');
 }
 
 //LECTURE DE MESSAGE
 function readMessage()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $modelBackend->messageRead($_GET['id']);
-    $message = $modelBackend->getMessage($_GET['id']);
+    $messageManager = new Projet5\MessageManager;
+    $messageManager->messageRead($_GET['id']);
+    $message = $messageManager->getMessage($_GET['id']);
     require('views/read-mail.php');
 }
 
 //SUPPRIME UN MESSAGE
 function deleteMessages()
 {
-    $modelBackend = new Projet5\ModelBackend;
-    $modelBackend->deleteMessage($_GET['id']);
-    header('location:index.php?p=message&page=1');
+    $messageManager = new Projet5\MessageManager;
+    session_start();
+    if(isset($_COOKIE['admin']) OR isset($_SESSION['admin']) AND !empty($_SESSION['admin'])){
+        $messageManager->deleteMessage($_GET['id']);
+        header('location:index.php?p=message&page=1');
+    }
+    else{
+        header('location:index.php?p=login_page');
+    }
 }
 
 // ---------------------------------------------LOG-----------------------------------------------
 //LOGIN
 function login()
 {
+    $logManager = new Projet5\LogManager;
     $error = "";
-    $modelBackend = new Projet5\ModelBackend;
-    $login = $modelBackend->checkpseudo($_POST['pseudo']);
+    $login = $logManager->checkpseudo($_POST['pseudo']);
     $isPasswordCorrect = password_verify($_POST['pass'], $login['password']);
 
-    if (!$login):
+    if (!$login){
         $error = "Mauvais identifiant ou mot de passe !";
         require('views/login.php');
-    else:
-        if ($isPasswordCorrect):
+    }
+    else{
+        if ($isPasswordCorrect){
             
-            if (isset($_POST["remember"])):
+            if (isset($_POST["remember"])){
                 setcookie('admin', $_POST['pseudo'], time() + 365*24*3600, null, null, false, true);
                 header('location:index.php');
-            else:
+            }
+            else{
                 session_start();
                 $_SESSION['admin'] = $_POST['pseudo'];
                 header('location:index.php');
-            endif;
-        else:
+            }
+        }
+        else{
             $error = "Mauvais identifiant ou mot de passe !";
             require('views/login.php');
-        endif;
-    endif;
+        }
+    }
 }
 
 //LOGOUT
@@ -201,4 +256,16 @@ function logout()
     session_destroy();
     setcookie('admin', $_POST['pseudo'], time() + 365*24*3600, null, null, false, true);
     header('location:index.php');
+}
+
+//PAGE LOGIN
+function viewLogin()
+{
+    require('views/login.php');
+}
+
+//PAGE 404
+function qcq()
+{
+    require('views/404.php');
 }
